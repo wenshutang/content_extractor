@@ -1,0 +1,35 @@
+#********** OSX **********
+
+.DS_Store
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+
+#********** ruby **********
+*.gem
+*.rbc
+.bundle
+.config
+.rspec
+coverage
+InstalledFiles
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+CODE_OF_CONDUCT.md
+
+# YARD artifacts
+.yardoc
+_yardoc
+doc/
+
+.travis.yml
