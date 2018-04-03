@@ -1,7 +1,7 @@
 require 'nokogiri'
 require 'uri'
 require 'open-uri'
-require_relative 'element'
+require 'element'
 
 module ContentExtractor
 
@@ -37,7 +37,7 @@ module ContentExtractor
       u.open { |file| @html_doc = Nokogiri::HTML(file) }
 
     rescue OpenURI::HTTPError => excp
-      raise "#{excp}, could not open #{@host_url}: "
+      raise "#{excp}, could not open #{@host_url} "
     ensure
       @html_doc
     end

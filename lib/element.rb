@@ -6,6 +6,7 @@ require_relative 'utilities'
 module ContentExtractor
 
   class Element
+
     attr_accessor :data
     
     def initialize &block
@@ -17,9 +18,8 @@ module ContentExtractor
         @context = eval 'self', block.binding
         # puts "- respond to match_first? #{@context.respond_to?('match_first')}"
         # puts "- context_name: #{@context.class.name}"
-
         instance_eval &block
-        # puts "- after instance_eval"
+
       # else
          # yield self
       # end
@@ -42,7 +42,6 @@ module ContentExtractor
         self[key] = child
         child.instance_exec *args, &block
       else
-        # puts ">>> CASE 3 <<<"
         self[key] = args.first
       end
 
@@ -50,27 +49,47 @@ module ContentExtractor
 
     # if a key is present, data is appended as an enumerable
     def []= k, v
-      @data[k] = @data[k] ? [*@data[k]] << v : v
+      # puts "Adding #{k}: #{v}"
+      if @data.is_a?(Hash)
+        @data.has_key?(k) ? self << {k => v} : @data[k] = v
+        return
+      end
+      @data.last.has_key?(k) ? self << {k => v} : @data.last[k] = v
+
+    end
+
+    def << v
+      if @data.is_a?(Hash) 
+        @data = [@data] << v
+      else
+        @data << v
+      end
     end
 
     def [] k
       @data[k]
     end
-
-    # def key_cnt
-    #   @data.keys.each{|k| p k}
-    # end
-    
+   
     def to_h
-      @data.each do | k,v | 
-#        if v.is_a? Enumerable
-#          @data[k] = v.map { |e| e.to_data }
-        @data[k] = v.to_h if v.is_a? ContentExtractor::Element
-
+      if @data.is_a? Array
+        @data.map { |e| e.to_h }
+      else
+        @data.each do |k,v| 
+          @data[k] = v.to_h if v.is_a? ContentExtractor::Element
+        end
       end
       @data
     end
     alias :to_data :to_h
+
+    def to_h!
+      if @data.is_a? Enumerable
+        @data = Array.new(@data)
+      else
+        @data = @data.to_h
+      end
+    end
+    alias :to_data! :to_h!
 
     def inspect
       JSON.pretty_generate(self.to_h).gsub(":", " =>")

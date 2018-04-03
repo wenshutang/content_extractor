@@ -1,10 +1,10 @@
-module Utilities
+module ContentExtractor
   module Matchable
     
     extend self
 
     def match_any frag, selector, *args, &block
-      frag.css(selector).map do |elem|
+      frag.css(selector).each do |elem|
         block.call elem, args if block_given?
       end
     end
