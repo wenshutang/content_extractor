@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "content/extractor"
+require "content_extractor"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
